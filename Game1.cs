@@ -13,12 +13,9 @@ public class Game1 : Game
 	private SpriteFont _font;
 	private bool _spinning = false;
 	private CoinManager _wallet;
-	private Vector2[] _reelPositions = new Vector2[]{
-			new Vector2(100, 100),
-			new Vector2(300, 100),
-			new Vector2(500, 100)
-	};
+	private Vector2[] _reelPositions;
 	private List<Reel> _reels = new List<Reel>();
+	private PlayButton _button;
 
 	public Game1()
 	{
@@ -35,6 +32,23 @@ public class Game1 : Game
 		_graphics.PreferredBackBufferHeight = 768;
 		_graphics.ApplyChanges();
 
+		int screenWidth = _graphics.PreferredBackBufferWidth;
+		int screenHeight = _graphics.PreferredBackBufferHeight;
+
+		int reelWidth = 192;
+		int reelHeight = 448;
+		int totalReelWidth = 3 * reelWidth + 2 * 20;
+
+		int startX = (screenWidth - totalReelWidth) / 2;
+		int startY = (screenHeight - reelHeight) / 2;
+
+		_reelPositions = new Vector2[]
+		{
+			new Vector2(startX, startY),
+			new Vector2(startX + reelWidth + 20, startY),
+			new Vector2(startX + 2 * (reelWidth + 20), startY)
+		};
+
 		base.Initialize();
 	}
 
@@ -44,6 +58,8 @@ public class Game1 : Game
 
 		// TODO: use this.Content to load your game content here
 		_font = this.Content.Load<SpriteFont>("Font");
+
+		_button = new PlayButton(this.Content);
 
 		for (int i = 0; i < 3; i++)
 		{
@@ -102,6 +118,7 @@ public class Game1 : Game
 
 		_spriteBatch.Begin();
 		_wallet.GetBalance(_spriteBatch, _font);
+		_button.Draw(_spriteBatch);
 		_spriteBatch.End();
 
 		_spriteBatch.Begin();
