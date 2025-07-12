@@ -40,11 +40,11 @@ public class Game1 : Game
 		int totalReelWidth = 3 * reelWidth + 2 * 20;
 
 		int startX = (screenWidth - totalReelWidth) / 2;
-		int startY = (screenHeight - reelHeight) / 2;
+		int startY = (screenHeight - reelHeight) / 2 - 100;
 
 		_reelPositions = new Vector2[]
 		{
-			new Vector2(startX, startY),
+			new Vector2(startX, startY ),
 			new Vector2(startX + reelWidth + 20, startY),
 			new Vector2(startX + 2 * (reelWidth + 20), startY)
 		};
@@ -59,7 +59,11 @@ public class Game1 : Game
 		// TODO: use this.Content to load your game content here
 		_font = this.Content.Load<SpriteFont>("Font");
 
+		int buttonWidth = 384;
+		int buttonX = _graphics.PreferredBackBufferWidth / 2 - buttonWidth / 2;
+		int buttonY = (_graphics.PreferredBackBufferHeight - 448) / 2 + 448;
 		_button = new PlayButton(this.Content);
+		_button.Position = new Vector2(buttonX, buttonY);
 
 		for (int i = 0; i < 3; i++)
 		{
@@ -67,6 +71,14 @@ public class Game1 : Game
 		}
 
 		_wallet = new CoinManager();
+
+		_button.OnClick += () =>
+		{
+			if (!_spinning && _wallet.CanAffordSpin())
+			{
+				StartSpin();
+			}
+		};
 	}
 
 	protected override void Update(GameTime gameTime)
@@ -74,21 +86,7 @@ public class Game1 : Game
 		if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 			Exit();
 
-		// TODO: Add your update logic here
-		if (!_spinning && Keyboard.GetState().IsKeyDown(Keys.Space) && _wallet.CanAffordSpin())
-		{
-			_spinning = true;
-
-			_wallet.SpendCoins();
-
-			Random rng = new();
-
-			for (int i = 0; i < 3; i++)
-			{
-				double timer = 1.0 + (i * 0.5) + rng.NextDouble() + 0.2;
-				_reels[i].Start(timer);
-			}
-		}
+		_button.Update(gameTime);
 
 		foreach (var reel in _reels)
 		{
@@ -134,6 +132,21 @@ public class Game1 : Game
 		}
 
 		base.Draw(gameTime);
+	}
+
+	private void StartSpin()
+	{
+		_spinning = true;
+
+		_wallet.SpendCoins();
+
+		Random rng = new();
+
+		for (int i = 0; i < 3; i++)
+		{
+			double timer = 1.0 + (i * 0.5) + rng.NextDouble() + 0.2;
+			_reels[i].Start(timer);
+		}
 	}
 
 	private void DrawReel(int i)

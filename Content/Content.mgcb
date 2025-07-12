@@ -104,6 +104,18 @@
 /processorParam:TextureFormat=Color
 /build:textures/seven_128.png
 
+#begin textures/spin_button_pressed.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:textures/spin_button_pressed.png
+
 #begin textures/spin_button.png
 /importer:TextureImporter
 /processor:TextureProcessor
