@@ -27,9 +27,9 @@ namespace SlotMachine
 				new Symbol { Name = "Cherry", Value = 10, Rarity = 0.35f, Texture = content.Load<Texture2D>("textures/cherry_128") },
 				new Symbol { Name = "Bar", Value = 20, Rarity = 0.25f, Texture = content.Load<Texture2D>("textures/bar_128") },
 				new Symbol { Name = "Seven", Value = 30, Rarity = 0.20f, Texture = content.Load<Texture2D>("textures/seven_128") },
-				new Symbol { Name = "Bell", Value = 50, Rarity = 0.10f, Texture = content.Load<Texture2D>("textures/bell_128") },
-				new Symbol { Name = "Chip", Value = 75, Rarity = 0.06f, Texture = content.Load<Texture2D>("textures/chip_128") },
-				new Symbol { Name = "Diamond", Value = 100, Rarity = 0.04f, Texture = content.Load<Texture2D>("textures/diamond_128") },
+				new Symbol { Name = "Bell", Value = 40, Rarity = 0.10f, Texture = content.Load<Texture2D>("textures/bell_128") },
+				new Symbol { Name = "Chip", Value = 50, Rarity = 0.06f, Texture = content.Load<Texture2D>("textures/chip_128") },
+				new Symbol { Name = "Diamond", Value = 80, Rarity = 0.04f, Texture = content.Load<Texture2D>("textures/diamond_128") },
 			};
 
 			_weightedSymbols = AllSymbols.Select(s => (s, s.Rarity)).ToList();
