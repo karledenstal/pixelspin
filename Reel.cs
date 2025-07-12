@@ -52,10 +52,17 @@ public class Reel
 
 				Symbol next;
 
-				do
+				if (ShouldUseWeightedSymbol())
 				{
-					next = _symbols.GetRandomVisualSymbol();
-				} while (_previousSymbol != null && next.Name == _previousSymbol.Name);
+					next = _symbols.GetRandomWeightedSymbol(_previousSymbol);
+				}
+				else
+				{
+					do
+					{
+						next = _symbols.GetRandomVisualSymbol();
+					} while (_previousSymbol != null && next.Name == _previousSymbol.Name);
+				}
 
 				_visibleSymbols.Add(next);
 				_previousSymbol = next;
@@ -70,7 +77,7 @@ public class Reel
 				_spinSoundInstance.Stop();
 				_soundManager.Play("Stop");
 
-				_visibleSymbols[_visibleSymbols.Count - 1] = _symbols.GetRandomWeightedSymbol();
+				// _visibleSymbols[1] = _symbols.GetRandomWeightedSymbol();
 				CurrentSymbol = _visibleSymbols[1];
 			}
 		}
@@ -102,5 +109,10 @@ public class Reel
 	public void DrawFrame(SpriteBatch spriteBatch, Vector2 position)
 	{
 		spriteBatch.Draw(FrameTexture, position, Color.White);
+	}
+
+	private bool ShouldUseWeightedSymbol()
+	{
+		return SpinTimer <= 0.4; // 4 ticks * 0.1 = 0.4
 	}
 }

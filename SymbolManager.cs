@@ -42,22 +42,29 @@ namespace SlotMachine
 			return AllSymbols[index];
 		}
 
-		public Symbol GetRandomWeightedSymbol()
+		public Symbol GetRandomWeightedSymbol(Symbol avoid = null)
 		{
 			float totalWeight = _weightedSymbols.Sum(s => s.weight);
-			float roll = (float)_random.NextDouble() * totalWeight;
+			int safety = 10;
 
-			float cumulative = 0f;
-
-			foreach (var (symbol, weight) in _weightedSymbols)
+			for (int attempt = 0; attempt < safety; attempt++)
 			{
-				cumulative += weight;
-				if (roll <= cumulative)
+				float roll = (float)_random.NextDouble() * totalWeight;
+				float cumulative = 0f;
+
+				foreach (var (symbol, weight) in _weightedSymbols)
 				{
-					return symbol;
+					cumulative += weight;
+					if (roll <= cumulative)
+					{
+						if (avoid == null || symbol.Name != avoid.Name)
+							return symbol;
+						break; // Break early to retry the roll
+					}
 				}
 			}
 
+			// Fallback: Just return the last symbol in case of bad luck
 			return _weightedSymbols.Last().symbol;
 		}
 	}
