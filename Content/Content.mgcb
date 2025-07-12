@@ -27,6 +27,48 @@
 /processorParam:TextureFormat=Compressed
 /build:fonts/TinyRetro.spritefont
 
+#begin sounds/bet_click.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/bet_click.wav
+
+#begin sounds/bg_music.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:sounds/bg_music.mp3
+
+#begin sounds/button_click.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/button_click.wav
+
+#begin sounds/jackpot.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/jackpot.wav
+
+#begin sounds/one_win.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/one_win.wav
+
+#begin sounds/slot_machine_reel_stop.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/slot_machine_reel_stop.wav
+
+#begin sounds/slot_spin.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/slot_spin.wav
+
 #begin textures/bar_128.png
 /importer:TextureImporter
 /processor:TextureProcessor

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 
 namespace SlotMachine;
 
@@ -20,6 +21,7 @@ public class Game1 : Game
 	private BetButton _decreaseBetButton;
 	private int _screenWidth;
 	private int _screenHeight;
+	private SoundManager _soundManager;
 
 	public Game1()
 	{
@@ -31,7 +33,7 @@ public class Game1 : Game
 	protected override void Initialize()
 	{
 		// TODO: Add your initialization logic here
-
+		Window.Title = "Pixel Spin";
 		_graphics.PreferredBackBufferWidth = 1024;
 		_graphics.PreferredBackBufferHeight = 768;
 		_graphics.ApplyChanges();
@@ -62,6 +64,7 @@ public class Game1 : Game
 
 		// TODO: use this.Content to load your game content here
 		_font = this.Content.Load<SpriteFont>("fonts/TinyRetro");
+		_soundManager = new SoundManager(this.Content);
 
 		int reelHeight = 448;
 
@@ -74,8 +77,9 @@ public class Game1 : Game
 
 		for (int i = 0; i < 3; i++)
 		{
-			_reels.Add(new Reel(this.Content));
+			_reels.Add(new Reel(this.Content, _soundManager));
 		}
+
 
 		_coinManager = new CoinManager(this.Content);
 		_coinManager.Position = new Vector2(10, 20);
@@ -92,13 +96,22 @@ public class Game1 : Game
 			new Vector2(buttonX - 85, buttonY + 30)
 		);
 
-		_increaseBetButton.OnClick += () => _coinManager.IncreaseBetAmount(10);
-		_decreaseBetButton.OnClick += () => _coinManager.DecreaseBetAmount(10);
+		_increaseBetButton.OnClick += () =>
+		{
+			_soundManager.Play("BetClick");
+			_coinManager.IncreaseBetAmount(10);
+		};
+		_decreaseBetButton.OnClick += () =>
+		{
+			_soundManager.Play("BetClick");
+			_coinManager.DecreaseBetAmount(10);
+		};
 
 		_button.OnClick += () =>
 		{
 			if (!_spinning && _coinManager.CanAffordSpin())
 			{
+				_soundManager.Play("ButtonClick");
 				StartSpin();
 			}
 		};
@@ -129,6 +142,7 @@ public class Game1 : Game
 			}
 
 			int payout = EvaluateSymbols(selectedSymbols[0], selectedSymbols[1], selectedSymbols[2]);
+			MediaPlayer.Resume();
 			_coinManager.AddCoins(payout);
 		}
 
@@ -164,7 +178,6 @@ public class Game1 : Game
 	private void StartSpin()
 	{
 		_spinning = true;
-
 		_coinManager.SpendCoins();
 
 		Random rng = new();
@@ -205,15 +218,18 @@ public class Game1 : Game
 
 	private int EvaluateSymbols(Symbol s1, Symbol s2, Symbol s3)
 	{
+		MediaPlayer.Pause();
 		if (s1.Name == s2.Name && s2.Name == s3.Name)
 		{
 			int basePayout = s1.Value * 3;
+			_soundManager.Play("Payout");
 			return basePayout * (_coinManager.GetBetAmount() / 10);
 		}
 
 		if (s1.Name == s2.Name || s2.Name == s3.Name || s1.Name == s3.Name)
 		{
 			var match = s1.Name == s2.Name ? s1 : s2.Name == s3.Name ? s2 : s3;
+			_soundManager.Play("Payout");
 			return match.Value * (_coinManager.GetBetAmount() / 10);
 		}
 

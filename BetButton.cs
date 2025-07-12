@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+namespace SlotMachine;
+
 public class BetButton
 {
 	private Texture2D _normalTexture;
